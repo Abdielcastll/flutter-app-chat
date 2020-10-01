@@ -1,5 +1,6 @@
 import 'package:chat_app/helpers/mostrar_alerta.dart';
 import 'package:chat_app/services/auth_service.dart';
+import 'package:chat_app/services/socket_services.dart';
 import 'package:chat_app/widgets/Label.dart';
 import 'package:chat_app/widgets/boton_azul.dart';
 import 'package:chat_app/widgets/custom_input.dart';
@@ -79,6 +80,8 @@ class __FormState extends State<_Form> {
             onPressed: authService.autenticando ? null : () async {
               final registerOK = await authService.register( nameController.text.trim(), passController.text.trim(), emailController.text.trim());
               if (registerOK == true) {
+                final socketService= Provider.of<SocketService>(context);
+                socketService.connect();
                 Navigator.pushReplacementNamed(context, 'usuarios');
               } else {
                 mostrarAlerta(context, 'Error', registerOK);

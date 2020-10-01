@@ -1,5 +1,6 @@
 import 'package:chat_app/helpers/mostrar_alerta.dart';
 import 'package:chat_app/services/auth_service.dart';
+import 'package:chat_app/services/socket_services.dart';
 import 'package:chat_app/widgets/Label.dart';
 import 'package:chat_app/widgets/boton_azul.dart';
 import 'package:chat_app/widgets/custom_input.dart';
@@ -49,6 +50,7 @@ class __FormState extends State<_Form> {
   Widget build(BuildContext context) {
    
     final authService = Provider.of<AuthService>(context);
+    final socketService= Provider.of<SocketService>(context);
    
     return Container(
       margin: EdgeInsets.only(top: 10.0, left: 30.0, right: 30.0),
@@ -73,7 +75,7 @@ class __FormState extends State<_Form> {
             onPressed: authService.autenticando ? null : () async {
               final loginOK = await authService.login(emailController.text.trim(), passController.text.trim());
               if (loginOK) {
-                
+                socketService.connect();
                 Navigator.pushReplacementNamed(context, 'usuarios');
               } else {
                 mostrarAlerta(context, 'Error', 'Email o contraseña incorrecta');
